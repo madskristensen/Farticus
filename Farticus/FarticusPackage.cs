@@ -17,24 +17,30 @@ namespace LigerShark.Farticus
     [ProvideOptionPage(typeof(FartOptions), "Farticus", "General", 101, 101, true, new[] { "The original Visual Studio fart app" })]
     public sealed class FarticusPackage : ExtensionPointPackage
     {
-        private static DTE2 _dte;
-        private static readonly List<string> _messages = new List<string>()
+        private DTE2 _dte;
+        private BuildEvents _events;
+
+        private readonly List<string> _messages = new List<string>()
         {
-            "This is my favorite",
-            "Don't hold back!",
-            "Thanks, just what I needed",
+            "Yes! This is my favorite type of fart",
+            "Excellent. Don't hold back!",
+            "Great job! It smells like roses in here now",
             "Sometimes you just have to let 'em rip",
-            "Ahhh, the felt right",
-            "Ooops, I'm not sure about that one"
+            "Ahhh, that felt right",
+            "Ooops, I'm not sure about that one",
+            "Wow, someone has been practicing",
+            "You might want to be a little careful",
+            "What a stinker. The paint is coming off the walls"
         };
 
         protected override void Initialize()
         {
             base.Initialize();
 
-            _dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE2;
-            _dte.Events.BuildEvents.OnBuildProjConfigDone += OnBuildDone;
-
+            _dte = GetService(typeof(DTE)) as DTE2;
+            _events = _dte.Events.BuildEvents;
+            _events.OnBuildProjConfigDone += OnBuildDone;
+            
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
         
             if (null != mcs)

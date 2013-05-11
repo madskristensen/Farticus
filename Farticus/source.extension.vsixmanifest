@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="1324ce08-8b25-440c-8d5c-07e1fa0cce4a" Version="1.1" Language="en-US" Publisher="LigerShark" />
+    <Identity Id="1324ce08-8b25-440c-8d5c-07e1fa0cce4a" Version="1.1.2" Language="en-US" Publisher="LigerShark" />
     <DisplayName>Farticus</DisplayName>
     <Description xml:space="preserve">The original Visual Studio fart app</Description>
     <License>License.txt</License>
