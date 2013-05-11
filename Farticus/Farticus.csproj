@@ -119,7 +119,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\FartList.cs" />
+    <Compile Include="App\FartEnum.cs" />
     <Compile Include="App\FartOptions.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -147,6 +147,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="README.md" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -157,6 +158,7 @@
   <ItemGroup>
     <VSCTCompile Include="Farticus.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
+      <SubType>Designer</SubType>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>

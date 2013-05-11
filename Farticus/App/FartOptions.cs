@@ -10,7 +10,7 @@ namespace LigerShark.Farticus
         [LocDisplayName("On build failed")]
         [Description("Select which fart to play when the build fails")]
         [Category("Farticus")]
-        public FartList SelectedFart { get; set; }
+        public Farts SelectedFart { get; set; }
 
         [LocDisplayName("Enable auto-farts")]
         [Description("When enabled, farts are played when the build fails")]

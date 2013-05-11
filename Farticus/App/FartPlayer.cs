@@ -1,27 +1,24 @@
-﻿using EnvDTE80;
-using System;
+﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Media;
 
 namespace LigerShark.Farticus
 {
     internal class FartPlayer
     {
-        private static string _folder = GetFolderName();
+        private static readonly string _folder = GetFolderName();
 
-        public static void PlayRandomFart(DTE2 dte)
+        public static void PlayRandomFart()
         {
-            string folder = FartPlayer.GetFolderName();
+            string folder = _folder;
             string[] files = Directory.GetFiles(folder, "*.mp3", SearchOption.TopDirectoryOnly);
 
             Random rn = new Random(DateTime.Now.Millisecond);
-            int index = rn.Next(files.Length);
+            int index = rn.Next(0, files.Length);
 
-            string fart = files[index];
-            
-            PlayFart(fart);
-            dte.StatusBar.Text = "Playing " + Path.GetFileNameWithoutExtension(fart);
+            PlayFart(files[index]);
         }
 
         public static void PlayFart(FartOptions options)
@@ -36,17 +33,24 @@ namespace LigerShark.Farticus
         private static void PlayFart(string fileName)
         {
             string absolute = Path.Combine(_folder, fileName);
+            ThreadPool.QueueUserWorkItem(o => PlayAudio(absolute));
+        }
 
-            new System.Threading.Thread(() =>
+        private static void PlayAudio(string absolute)
+        {
+            try
             {
-                MediaPlayer _player = new MediaPlayer();
-                _player.MediaEnded += ClosePlayer;
-                _player.MediaFailed += ClosePlayer;
+                MediaPlayer player = new MediaPlayer();
+                player.MediaEnded += ClosePlayer;
+                player.MediaFailed += ClosePlayer;
 
-                _player.Open(new Uri(absolute, UriKind.Absolute));
-                _player.Play();
-
-            }).Start();
+                player.Open(new Uri(absolute, UriKind.Absolute));
+                player.Play();
+            }
+            catch
+            {
+                // Catching any exception to avoid crashing VS
+            }
         }
 
         private static void ClosePlayer(object sender, EventArgs e)
@@ -59,11 +63,12 @@ namespace LigerShark.Farticus
                 player.Close();
             }
         }
-                
-        public static string GetFolderName()
+
+        private static string GetFolderName()
         {
             string assembly = Assembly.GetExecutingAssembly().Location;
-            return Path.GetDirectoryName(assembly) + "\\audio";
+            string folder = Path.GetDirectoryName(assembly);
+            return Path.Combine(folder, "audio");
         }
     }
 }
