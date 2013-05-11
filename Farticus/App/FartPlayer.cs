@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EnvDTE80;
+using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace LigerShark.Farticus
@@ -13,7 +10,30 @@ namespace LigerShark.Farticus
     {
         private static string _folder = GetFolderName();
 
-        public static void Fart(string fileName)
+        public static void PlayRandomFart(DTE2 dte)
+        {
+            string folder = FartPlayer.GetFolderName();
+            string[] files = Directory.GetFiles(folder, "*.mp3", SearchOption.TopDirectoryOnly);
+
+            Random rn = new Random(DateTime.Now.Millisecond);
+            int index = rn.Next(files.Length);
+
+            string fart = files[index];
+            
+            PlayFart(fart);
+            dte.StatusBar.Text = "Playing " + Path.GetFileNameWithoutExtension(fart);
+        }
+
+        public static void PlayFart(FartOptions options)
+        {
+            if (options.Enabled)
+            {
+                string fileName = options.SelectedFart.ToString() + ".mp3";
+                PlayFart(fileName);
+            }
+        }
+
+        private static void PlayFart(string fileName)
         {
             string absolute = Path.Combine(_folder, fileName);
 
@@ -27,15 +47,6 @@ namespace LigerShark.Farticus
                 _player.Play();
 
             }).Start();
-        }
-
-        public static void Fart(FartOptions options)
-        {
-            if (options.Enabled)
-            {
-                string fileName = options.SelectedFart.ToString() + ".mp3";
-                Fart(fileName);
-            }
         }
 
         private static void ClosePlayer(object sender, EventArgs e)

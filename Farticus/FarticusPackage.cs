@@ -1,19 +1,13 @@
-﻿using System;
+﻿using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
+using System;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
-using System.ComponentModel.Design;
-using Microsoft.Win32;
-using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.OLE.Interop;
-using Microsoft.VisualStudio.Shell;
-using EnvDTE80;
-using EnvDTE;
-using System.Media;
-using System.Windows.Media;
 using System.Windows.Threading;
-using System.IO;
 
 namespace LigerShark.Farticus
 {
@@ -43,36 +37,6 @@ namespace LigerShark.Farticus
         private static DTE2 _dte;
 
         /// <summary>
-        /// Default constructor of the package.
-        /// Inside this method you can place any initialization code that does not require 
-        /// any Visual Studio service because at this point the package object is created but 
-        /// not sited yet inside Visual Studio environment. The place to do all the other 
-        /// initialization is the Initialize method.
-        /// </summary>
-        public FarticusPackage()
-        {
-            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering constructor for: {0}", this.ToString()));
-        }
-
-        internal static DTE2 DTE
-        {
-            get
-            {
-                if (_dte == null)
-                {
-                    _dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE2;
-                    Debug.Assert(_dte != null);
-                }
-
-                return _dte;
-            }
-        }
-
-        /////////////////////////////////////////////////////////////////////////////
-        // Overridden Package Implementation
-        #region Package Members
-
-        /// <summary>
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
         /// where you can put all the initialization code that rely on services provided by VisualStudio.
         /// </summary>
@@ -81,48 +45,32 @@ namespace LigerShark.Farticus
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
             base.Initialize();
 
+            _dte = ServiceProvider.GlobalProvider.GetService(typeof(DTE)) as DTE2;
+
             // Add our command handlers for menu (commands must exist in the .vsct file)
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
             if (null != mcs)
             {
-                // Create the command for the menu item.
-                CommandID menuCommandID = new CommandID(GuidList.guidFarticusCmdSet, (int)PkgCmdIDList.cmdidRandomFart);
-                MenuCommand menuItem = new MenuCommand(MenuItemCallback, menuCommandID);
+                CommandID fartCmd = new CommandID(GuidList.guidFarticusCmdSet, (int)PkgCmdIDList.cmdidRandomFart);
+                MenuCommand menuItem = new MenuCommand(OnFartButtonClick, fartCmd);
                 mcs.AddCommand(menuItem);
             }
 
-            DTE.Events.BuildEvents.OnBuildDone += BuildEvents_OnBuildDone;
+            _dte.Events.BuildEvents.OnBuildProjConfigDone += OnBuildDone;
         }
 
-
-        private void BuildEvents_OnBuildDone(vsBuildScope Scope, vsBuildAction Action)
+        private void OnBuildDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
         {
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
-           {
-               if (DTE.Solution.SolutionBuild.LastBuildInfo != 0)
-               {
-                   FartOptions options = (FartOptions)GetDialogPage(typeof(FartOptions));
-                   FartPlayer.Fart(options);
-               }
-           }), DispatcherPriority.ApplicationIdle, null);
+            if (!Success)
+            {
+                FartOptions options = (FartOptions)GetDialogPage(typeof(FartOptions));
+                FartPlayer.PlayFart(options);
+            }
         }
 
-        #endregion
-
-        /// <summary>
-        /// This function is the callback used to execute a command when the a menu item is clicked.
-        /// See the Initialize method to see how the menu item is associated to this function using
-        /// the OleMenuCommandService service and the MenuCommand class.
-        /// </summary>
-        private void MenuItemCallback(object sender, EventArgs e)
+        private void OnFartButtonClick(object sender, EventArgs e)
         {
-            string folder = FartPlayer.GetFolderName();
-            string[] files = Directory.GetFiles(folder, "*.mp3", SearchOption.TopDirectoryOnly);
-
-            Random rn = new Random(DateTime.Now.Millisecond);
-            int index = rn.Next(files.Length);
-
-            FartPlayer.Fart(files[index]);
+            FartPlayer.PlayRandomFart(_dte);
         }
     }
 }

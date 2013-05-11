@@ -12,5 +12,6 @@ namespace LigerShark.Farticus
         Fart2,
         Fart3,
         Fart4,
+        Fart5,
     }
 }

@@ -4,6 +4,10 @@
     <Identity Id="1324ce08-8b25-440c-8d5c-07e1fa0cce4a" Version="1.0" Language="en-US" Publisher="LigerShark" />
     <DisplayName>Farticus</DisplayName>
     <Description>The original Visual Studio fart extension</Description>
+    <License>License.txt</License>
+    <Icon>logo.png</Icon>
+    <PreviewImage>logo.png</PreviewImage>
+    <Tags>fart, sound</Tags>
   </Metadata>
   <Installation InstalledByMsi="false">
     <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="11.0" />
