@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h"/>
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidFarticusPkg">
+
+    <Groups>
+      <Group guid="guidFarticusCmdSet" id="MyMenuGroup" priority="0x0099">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_TOOL_STANDARD"/>
+      </Group>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidFarticusCmdSet" id="cmdidRandomFart" priority="0x0300" type="Button">
+        <Parent guid="guidFarticusCmdSet" id="MyMenuGroup" />
+        <Icon guid="guidImages" id="logo" />
+        <Strings>
+          <ButtonText>Play Random Fart</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\fart.png" usedList="logo"/>
+    </Bitmaps>
+  
+  </Commands>
+
+  <KeyBindings>
+    <KeyBinding guid="guidFarticusCmdSet" id="cmdidRandomFart" mod1="Shift" key1="VK_SPACE" editor="guidVSStd97"/>
+  </KeyBindings>
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidFarticusPkg" value="{1324ce08-8b25-440c-8d5c-07e1fa0cce4a}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidFarticusCmdSet" value="{7a332164-9846-4bc6-a00f-bc7e6132f29a}">
+
+      <IDSymbol name="MyMenuGroup" value="0x1020" />
+      <IDSymbol name="cmdidRandomFart" value="0x0100" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{24680110-4ff3-4a12-9819-981cf55f73f1}" >
+      <IDSymbol name="logo" value="1" />
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>

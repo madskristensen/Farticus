@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Farticus", "Farticus\Farticus.csproj", "{7A55CBDD-CA18-4619-A80E-9F6E409D8A15}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A55CBDD-CA18-4619-A80E-9F6E409D8A15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A55CBDD-CA18-4619-A80E-9F6E409D8A15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A55CBDD-CA18-4619-A80E-9F6E409D8A15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A55CBDD-CA18-4619-A80E-9F6E409D8A15}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
