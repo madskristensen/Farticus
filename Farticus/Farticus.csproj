@@ -204,4 +204,11 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  
+  <PropertyGroup>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(MSBuildProgramFiles32)\Microsoft Visual Studio 11.0\Common7\IDE\devenv.exe</StartProgram>
+  </PropertyGroup>
+  
+  
 </Project>
