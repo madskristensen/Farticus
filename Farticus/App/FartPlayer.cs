@@ -21,11 +21,27 @@ namespace LigerShark.Farticus
             PlayFart(files[index]);
         }
 
-        public static void PlayFart(FartOptions options)
+        public static void PlayErrorFart(FartOptions options)
         {
             if (options.Enabled)
             {
-                string fileName = options.SelectedFart.ToString() + ".mp3";
+                string fileName = options.SelectedErrorFart.ToString() + ".mp3";
+                PlayFart(fileName);
+            }
+        }
+        public static void PlayWarningFart(FartOptions options)
+        {
+            if (options.Enabled)
+            {
+                string fileName = options.SelectedWarningFart.ToString() + ".mp3";
+                PlayFart(fileName);
+            }
+        }
+        public static void PlayMessageFart(FartOptions options)
+        {
+            if (options.Enabled)
+            {
+                string fileName = options.SelectedMessageFart.ToString() + ".mp3";
                 PlayFart(fileName);
             }
         }
