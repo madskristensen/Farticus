@@ -40,9 +40,9 @@ namespace LigerShark.Farticus
             _dte = GetService(typeof(DTE)) as DTE2;
             _events = _dte.Events.BuildEvents;
             _events.OnBuildProjConfigDone += OnBuildDone;
-            
+
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-        
+
             if (null != mcs)
             {
                 CommandID fartCmd = new CommandID(GuidList.guidFarticusCmdSet, (int)PkgCmdIDList.cmdidRandomFart);
@@ -53,24 +53,25 @@ namespace LigerShark.Farticus
 
         private void OnBuildDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
         {
-            bool hasWarnings = _dte.ToolWindows.ErrorList.ErrorItems.Count > 0;
             FartOptions options = (FartOptions)GetDialogPage(typeof(FartOptions));
 
-            if (!Success )
+            if (options.Enabled)
             {
-                FartPlayer.PlayErrorFart(options);
-            }
-            else if (Success && hasWarnings)
-            {
-                FartPlayer.PlayWarningFart(options);
+                bool hasWarnings = _dte.ToolWindows.ErrorList.ErrorItems.Count > 0;
+                
+                if (!Success)
+                    FartPlayer.PlayFart(options.SelectedErrorFart);
+
+                else if (Success && hasWarnings)
+                    FartPlayer.PlayFart(options.SelectedWarningFart);
             }
         }
 
         private void OnFartButtonClick(object sender, EventArgs e)
         {
-            FartPlayer.PlayRandomFart();
+            FartPlayer.PlayFart(Farts.RandomFart);
 
-            Random rn = new Random(DateTime.Now.Millisecond);
+            Random rn = new Random();
             int index = rn.Next(0, _messages.Count);
 
             _dte.StatusBar.Text = _messages[index];

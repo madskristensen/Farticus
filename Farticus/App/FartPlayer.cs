@@ -1,94 +1,46 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Windows.Media;
 
 namespace LigerShark.Farticus
 {
     internal class FartPlayer
     {
-        private static readonly string _folder = GetFolderName();
+        private static MediaPlayer _player = new MediaPlayer();
+        private static string[] _files;
 
-        public static void PlayRandomFart()
+        static FartPlayer()
         {
-            string folder = _folder;
-            string[] files = Directory.GetFiles(folder, "*.mp3", SearchOption.TopDirectoryOnly);
+            string folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string audio = Path.Combine(folder, "audio");
 
-            Random rn = new Random(DateTime.Now.Millisecond);
-            int index = rn.Next(0, files.Length);
-
-            PlayFart(files[index]);
-        }
-
-        public static void PlayErrorFart(FartOptions options)
-        {
-            if (options.Enabled )
-            {
-                PlayFart(options.SelectedErrorFart);
-            }
+            _files = Directory.GetFiles(audio, "*.mp3", SearchOption.TopDirectoryOnly);
+            _player.MediaEnded += (s, e) => _player.Close();
         }
 
         public static void PlayFart(Farts fart)
         {
-            if (fart != Farts.RandomFart)
+            if (fart == Farts.RandomFart)
             {
-                string fileName = fart.ToString() + ".mp3";
-                PlayFart(fileName);
+                Random rn = new Random();
+                int index = rn.Next(0, _files.Length);
+
+                PlayFart(_files[index]);
             }
             else
             {
-                PlayRandomFart();
-            }
-        }
-
-        public static void PlayWarningFart(FartOptions options)
-        {
-            if (options.Enabled)
-            {
-                PlayFart(options.SelectedWarningFart);
+                PlayFart(fart + ".mp3");
             }
         }
 
         private static void PlayFart(string fileName)
         {
-            string absolute = Path.Combine(_folder, fileName);
-            ThreadPool.QueueUserWorkItem(o => PlayAudio(absolute));
-        }
+            string absolute = _files.FirstOrDefault(f => f.EndsWith("\\" + fileName, StringComparison.OrdinalIgnoreCase));
 
-        private static void PlayAudio(string absolute)
-        {
-            try
-            {
-                MediaPlayer player = new MediaPlayer();
-                player.MediaEnded += ClosePlayer;
-                player.MediaFailed += ClosePlayer;
-
-                player.Open(new Uri(absolute, UriKind.Absolute));
-                player.Play();
-            }
-            catch
-            {
-                // Catching any exception to avoid crashing VS
-            }
-        }
-
-        private static void ClosePlayer(object sender, EventArgs e)
-        {
-            var player = (MediaPlayer)sender;
-
-            if (player != null)
-            {
-                player.Stop();
-                player.Close();
-            }
-        }
-
-        private static string GetFolderName()
-        {
-            string assembly = Assembly.GetExecutingAssembly().Location;
-            string folder = Path.GetDirectoryName(assembly);
-            return Path.Combine(folder, "audio");
+            _player.Open(new Uri(absolute, UriKind.Absolute));
+            _player.Play();
         }
     }
 }
