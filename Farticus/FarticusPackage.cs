@@ -32,6 +32,7 @@ namespace LigerShark.Farticus
             "You might want to be a little careful",
             "What a stinker. The paint is coming off the walls"
         };
+        private int NumSuccessfulBuilds = 0;
 
         protected override void Initialize()
         {
@@ -39,8 +40,8 @@ namespace LigerShark.Farticus
 
             _dte = GetService(typeof(DTE)) as DTE2;
             _events = _dte.Events.BuildEvents;
-            _events.OnBuildProjConfigDone += OnBuildDone;
-
+            _events.OnBuildProjConfigDone += OnProjBuildDone;
+            _events.OnBuildDone += OnBuildDone;
             OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
 
             if (null != mcs)
@@ -51,14 +52,14 @@ namespace LigerShark.Farticus
             }
         }
 
-        private void OnBuildDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
+        private void OnProjBuildDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
         {
             FartOptions options = (FartOptions)GetDialogPage(typeof(FartOptions));
 
             if (options.Enabled)
             {
                 bool hasWarnings = _dte.ToolWindows.ErrorList.ErrorItems.Count > 0;
-                
+
                 if (!Success)
                     FartPlayer.PlayFart(options.SelectedErrorFart);
 
@@ -67,6 +68,24 @@ namespace LigerShark.Farticus
             }
         }
 
+        void OnBuildDone(vsBuildScope Scope, vsBuildAction Action)
+        {
+            if (_dte.Solution.SolutionBuild.LastBuildInfo == 0)
+            {
+                // last build was a success
+                NumSuccessfulBuilds++;
+                if (NumSuccessfulBuilds > 1) // don't show the msg for the first successful build
+                {
+                    _dte.StatusBar.Text += string.Format(" - {0} successful builds since last fart.", NumSuccessfulBuilds - 1);
+                }
+            }
+            else
+            {
+                _dte.StatusBar.Text += " - you just farted";
+                NumSuccessfulBuilds = 0;                
+            }
+        }
+      
         private void OnFartButtonClick(object sender, EventArgs e)
         {
             FartPlayer.PlayFart(Farts.RandomFart);
