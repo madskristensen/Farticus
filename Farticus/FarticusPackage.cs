@@ -53,34 +53,16 @@ namespace LigerShark.Farticus
 
         private void OnBuildDone(string Project, string ProjectConfig, string Platform, string SolutionConfig, bool Success)
         {
-            var errors = _dte.ToolWindows.ErrorList;
-            var hasError = false;
-            var hasWarning = false;
-            var hasMessages = false;
-            for (var i = 1; i <= errors.ErrorItems.Count; i++)
-            {
-                hasError = hasError || errors.ErrorItems.Item(i).ErrorLevel == vsBuildErrorLevel.vsBuildErrorLevelHigh;
-                hasWarning = hasWarning || errors.ErrorItems.Item(i).ErrorLevel == vsBuildErrorLevel.vsBuildErrorLevelMedium;
-                hasMessages = hasMessages || errors.ErrorItems.Item(i).ErrorLevel == vsBuildErrorLevel.vsBuildErrorLevelLow;
-
-                if (hasError && hasWarning && hasMessages)
-                {
-                    break;
-                }
-            }
-
+            bool hasWarnings = _dte.ToolWindows.ErrorList.ErrorItems.Count > 0;
             FartOptions options = (FartOptions)GetDialogPage(typeof(FartOptions));
-            if (!Success || hasError)
+
+            if (!Success )
             {
                 FartPlayer.PlayErrorFart(options);
             }
-            if (hasWarning)
+            else if (Success && hasWarnings)
             {
                 FartPlayer.PlayWarningFart(options);
-            }
-            if (hasMessages)
-            {
-                FartPlayer.PlayMessageFart(options);
             }
         }
 

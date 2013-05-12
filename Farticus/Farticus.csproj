@@ -160,19 +160,19 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Audio\fart1.mp3">
+    <Content Include="Audio\Sweet.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Audio\fart2.mp3">
+    <Content Include="Audio\Windy.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Audio\fart3.mp3">
+    <Content Include="Audio\WetEnding.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Audio\fart4.mp3">
+    <Content Include="Audio\HighPressure.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Audio\fart5.mp3">
+    <Content Include="Audio\Romantic.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="License.txt">
