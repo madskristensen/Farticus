@@ -160,13 +160,55 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Audio\Constant.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\Continious.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\Deep.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\DoubleTake.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\Echo.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\Extended.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Audio\Flute.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\LawnMower.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\Quick.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\RealQuick.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Audio\Ripper.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Content Include="Audio\Sharp.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\ShortRipper.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\Straining.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Audio\Sweet.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\Trumpet.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\WetOne.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Audio\Windy.mp3">
@@ -204,12 +246,9 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  
   <PropertyGroup>
     <StartAction>Program</StartAction>
     <StartProgram>$(MSBuildProgramFiles32)\Microsoft Visual Studio 11.0\Common7\IDE\devenv.exe</StartProgram>
-	<StartArguments>/rootsuffix Exp</StartArguments>
+    <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
-  
-  
 </Project>

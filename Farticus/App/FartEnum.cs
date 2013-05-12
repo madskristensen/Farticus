@@ -15,5 +15,19 @@
         Windy,
         Ripper,
         Flute,
+        LawnMower,
+        Constant,
+        Quick,
+        Trumpet,
+        DoubleTake,
+        Continious,
+        Deep,
+        Echo,
+        Extended,
+        RealQuick,
+        Sharp,
+        ShortRipper,
+        Straining,
+        WetOne
     }
 }
