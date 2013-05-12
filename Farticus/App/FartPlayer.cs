@@ -31,15 +31,14 @@ namespace LigerShark.Farticus
             }
             else
             {
-                PlayFart(fart + ".mp3");
+                string fileName = _files.FirstOrDefault(f => f.EndsWith("\\" + fart + ".mp3", StringComparison.OrdinalIgnoreCase));
+                PlayFart(fileName);
             }
         }
 
         private static void PlayFart(string fileName)
         {
-            string absolute = _files.FirstOrDefault(f => f.EndsWith("\\" + fileName, StringComparison.OrdinalIgnoreCase));
-
-            _player.Open(new Uri(absolute, UriKind.Absolute));
+            _player.Open(new Uri(fileName, UriKind.Absolute));
             _player.Play();
         }
     }
