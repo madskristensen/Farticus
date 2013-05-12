@@ -32,7 +32,9 @@ namespace LigerShark.Farticus
             else
             {
                 string fileName = _files.FirstOrDefault(f => f.EndsWith("\\" + fart + ".mp3", StringComparison.OrdinalIgnoreCase));
-                PlayFart(fileName);
+
+                if (!string.IsNullOrEmpty(fileName))
+                    PlayFart(fileName);
             }
         }
 
