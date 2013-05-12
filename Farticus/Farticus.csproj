@@ -172,7 +172,6 @@
     <Content Include="Audio\fart4.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Resource Include="Resources\fart.png" />
     <Content Include="Audio\fart5.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -180,6 +179,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Resource Include="Resources\icon.png" />
     <Content Include="logo.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
