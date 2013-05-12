@@ -13,5 +13,7 @@
         Romantic,
         WetEnding,
         Windy,
+        Ripper,
+        Flute,
     }
 }

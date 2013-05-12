@@ -22,7 +22,7 @@ namespace LigerShark.Farticus
                 _errorFart = value;
 
                 if (_hasLoaded)
-                    FartPlayer.PlayErrorFart(this);
+                    FartPlayer.PlayFart(value);
             }
         }
 
@@ -37,7 +37,7 @@ namespace LigerShark.Farticus
                 _warningFart = value;
 
                 if (_hasLoaded)
-                    FartPlayer.PlayWarningFart(this);
+                    FartPlayer.PlayFart(value);
             }
         }
 

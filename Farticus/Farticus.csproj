@@ -160,6 +160,12 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Audio\Flute.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="Audio\Ripper.mp3">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="Audio\Sweet.mp3">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

@@ -29,15 +29,7 @@ namespace LigerShark.Farticus
             }
         }
 
-        public static void PlayWarningFart(FartOptions options)
-        {
-            if (options.Enabled)
-            {
-                PlayFart(options.SelectedWarningFart);
-            }
-        }
-
-        private static void PlayFart(Farts fart)
+        public static void PlayFart(Farts fart)
         {
             if (fart != Farts.RandomFart)
             {
@@ -49,7 +41,15 @@ namespace LigerShark.Farticus
                 PlayRandomFart();
             }
         }
-        
+
+        public static void PlayWarningFart(FartOptions options)
+        {
+            if (options.Enabled)
+            {
+                PlayFart(options.SelectedWarningFart);
+            }
+        }
+
         private static void PlayFart(string fileName)
         {
             string absolute = Path.Combine(_folder, fileName);
