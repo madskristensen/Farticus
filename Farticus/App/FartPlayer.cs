@@ -22,6 +22,8 @@ namespace LigerShark.Farticus
 
         public static void PlayFart(Farts fart)
         {
+            if (fart == Farts.SilentButDeadly) return;
+
             if (fart == Farts.RandomFart)
             {
                 Random rn = new Random();

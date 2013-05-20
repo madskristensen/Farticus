@@ -28,6 +28,7 @@
         Sharp,
         ShortRipper,
         Straining,
-        WetOne
+        WetOne,
+        SilentButDeadly
     }
 }
