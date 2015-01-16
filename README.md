@@ -1,4 +1,4 @@
-﻿# Farticus for Visual Studio 2012 #
+﻿# Farticus for Visual Studio #
 
 The original Visual Studio fart app
   

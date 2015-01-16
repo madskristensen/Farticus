@@ -252,7 +252,7 @@
     <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
 
-  <PropertyGroup>
+  <!--<PropertyGroup>
     <EnableCompressVsix Condition=" '$(EnableCompressVsix)'=='' ">true</EnableCompressVsix>
     <BuildLib Condition=" '$(BuildLib)'=='' ">$(MSBuildProjectDirectory)\..\Build\Lib\</BuildLib>
   </PropertyGroup>
@@ -263,7 +263,9 @@
           DependsOnTargets="PrepareReplceVsixTemp" 
           Condition=" '$(EnableCompressVsix)'=='true' ">
     
-    <!-- copy the file to the obj folder and then party on it -->
+    -->
+  <!-- copy the file to the obj folder and then party on it -->
+  <!--
     <MakeDir Directories="$(_TmpVsixDir);$(_TmpVsixDir)\Extracted\"/>
 
     <Copy SourceFiles="$(TargetVsixContainer)"
@@ -271,7 +273,9 @@
       <Output TaskParameter="CopiedFiles" ItemName="_TmpVsixCopy"/>
     </Copy>
     
-    <!-- extract out the .zip file -->
+    -->
+  <!-- extract out the .zip file -->
+  <!--
     <MSBuild.ExtensionPack.Compression.Zip 
       TaskAction="Extract" 
       ExtractPath="$(_TmpVsixDir)Extracted\" 
@@ -304,6 +308,6 @@
       <_TmpVsixDir>%(_TmpVsixPathItem.RootDir)%(_TmpVsixPathItem.Directory)</_TmpVsixDir>
     </PropertyGroup>
 
-    <RemoveDir Directories="$(_TmpVsixDir)"/>  
-  </Target>  
+    <RemoveDir Directories="$(_TmpVsixDir)"/>
+  </Target>  -->
 </Project>
