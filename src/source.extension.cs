@@ -7,7 +7,7 @@ namespace LigerShark.Farticus
 {
     internal sealed partial class Vsix
     {
-        public const string Id = "1324ce08-8b25-440c-8d5c-07e1fa0cce4a";
+        public const string Id = "1324ce08-8b25-440c-1234-07e1fa0cce4a";
         public const string Name = "Farticus";
         public const string Description = @"The original Visual Studio fart app";
         public const string Language = "en-US";
