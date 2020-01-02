@@ -6,9 +6,8 @@
         <Description xml:space="preserve">The original Visual Studio fart app</Description>
         <MoreInfo>http://visualstudiogallery.msdn.microsoft.com/33b0242d-7158-4d39-9a01-0a08cf7c28bd</MoreInfo>
         <License>Resources\License.txt</License>
-        <GettingStartedGuide>http://visualstudiogallery.msdn.microsoft.com/33b0242d-7158-4d39-9a01-0a08cf7c28bd</GettingStartedGuide>
-        <Icon>Resources\icon.png</Icon>
-        <PreviewImage>Resources\icon.png</PreviewImage>
+        <Icon>Resources\logo.png</Icon>
+        <PreviewImage>Resources\logo.png</PreviewImage>
         <Tags>fart, sound</Tags>
     </Metadata>
     <Installation InstalledByMsi="false">
