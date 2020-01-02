@@ -21,6 +21,7 @@
         <Icon guid="guidImages" id="logo" />
         <Strings>
           <ButtonText>Play Random Fart</ButtonText>
+          <LocCanonicalName>.Farticus.PlayRandomFart</LocCanonicalName>
         </Strings>
       </Button>
     </Buttons>

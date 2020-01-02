@@ -1,22 +1,24 @@
 ﻿using EnvDTE;
 using EnvDTE80;
+using Microsoft;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
-using System.Windows.Threading;
+using System.Threading;
 
 namespace LigerShark.Farticus
 {
-    [PackageRegistration(UseManagedResourcesOnly = true)]
-    [InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [Guid(GuidList.guidFarticusPkgString)]
-    [ProvideAutoLoad(UIContextGuids80.SolutionExists)]
+    [Guid(PackageGuids.guidFarticusPkgString)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(FartOptions), "Farticus", "General", 101, 101, true, new[] { "The original Visual Studio fart app" })]
-    public sealed class FarticusPackage : ExtensionPointPackage
+    public sealed class FarticusPackage : AsyncPackage
     {
         private DTE2 _dte;
         private BuildEvents _events;
@@ -36,19 +38,19 @@ namespace LigerShark.Farticus
             "What a stinker. The paint is coming off the walls"
         };
 
-        protected override void Initialize()
+        protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            base.Initialize();
+            await JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            _dte = GetService(typeof(DTE)) as DTE2;
+            _dte = await GetServiceAsync(typeof(DTE)) as DTE2;
+            Assumes.Present(_dte);
+
             _events = _dte.Events.BuildEvents;
             _events.OnBuildDone += OnBuildDone;
 
-            OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-
-            if (null != mcs)
+            if (await GetServiceAsync(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
             {
-                CommandID fartCmd = new CommandID(GuidList.guidFarticusCmdSet, (int)PkgCmdIDList.cmdidRandomFart);
+                CommandID fartCmd = new CommandID(PackageGuids.guidFarticusCmdSet, PackageIds.cmdidRandomFart);
                 MenuCommand menuItem = new MenuCommand(OnFartButtonClick, fartCmd);
                 mcs.AddCommand(menuItem);
             }
@@ -66,8 +68,10 @@ namespace LigerShark.Farticus
 
         private void OnBuildDone(vsBuildScope Scope, vsBuildAction Action)
         {
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => // Execute after VS finishes its tasks
+            JoinableTaskFactory.Run(async () =>
             {
+
+                await JoinableTaskFactory.SwitchToMainThreadAsync();
                 FartOptions options = (FartOptions)GetDialogPage(typeof(FartOptions));
 
                 if (options.Enabled)
@@ -89,7 +93,7 @@ namespace LigerShark.Farticus
                     }
                 }
 
-            }), DispatcherPriority.ApplicationIdle, null);
+            });
         }
 
         private void Fart(bool isSuccess, FartOptions options)
