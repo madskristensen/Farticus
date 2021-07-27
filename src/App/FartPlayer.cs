@@ -8,13 +8,13 @@ namespace LigerShark.Farticus
 {
     internal class FartPlayer
     {
-        private static MediaPlayer _player = new MediaPlayer();
-        private static string[] _files;
+        private static readonly MediaPlayer _player = new MediaPlayer();
+        private static readonly string[] _files;
 
         static FartPlayer()
         {
-            string folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string audio = Path.Combine(folder, "audio");
+            var folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var audio = Path.Combine(folder, "audio");
 
             _files = Directory.GetFiles(audio, "*.mp3", SearchOption.TopDirectoryOnly);
             _player.MediaEnded += (s, e) => _player.Close();
@@ -22,21 +22,26 @@ namespace LigerShark.Farticus
 
         public static void PlayFart(Farts fart)
         {
-            if (fart == Farts.SilentButDeadly) return;
+            if (fart == Farts.SilentButDeadly)
+            {
+                return;
+            }
 
             if (fart == Farts.RandomFart)
             {
-                Random rn = new Random();
-                int index = rn.Next(0, _files.Length);
+                var rn = new Random();
+                var index = rn.Next(0, _files.Length);
 
                 PlayFart(_files[index]);
             }
             else
             {
-                string fileName = _files.FirstOrDefault(f => f.EndsWith("\\" + fart + ".mp3", StringComparison.OrdinalIgnoreCase));
+                var fileName = _files.FirstOrDefault(f => f.EndsWith("\\" + fart + ".mp3", StringComparison.OrdinalIgnoreCase));
 
                 if (!string.IsNullOrEmpty(fileName))
+                {
                     PlayFart(fileName);
+                }
             }
         }
 

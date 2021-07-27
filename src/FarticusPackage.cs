@@ -1,27 +1,24 @@
-﻿using EnvDTE;
-using EnvDTE80;
-using Microsoft;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Threading;
+using Community.VisualStudio.Toolkit;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace LigerShark.Farticus
 {
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration(Vsix.Name, Vsix.Description, Vsix.Version)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
+    [ProvideBindingPath()]
     [Guid(PackageGuids.guidFarticusPkgString)]
     [ProvideAutoLoad(UIContextGuids80.SolutionHasSingleProject, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideAutoLoad(UIContextGuids80.SolutionHasMultipleProjects, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideOptionPage(typeof(FartOptions), "Farticus", "General", 101, 101, true, new[] { "The original Visual Studio fart app" })]
     public sealed class FarticusPackage : AsyncPackage
     {
-        private DTE2 _dte;
-        private BuildEvents _events;
         private int _successfulBuilds;
         private bool _hasBuildFailed;
 
@@ -42,16 +39,12 @@ namespace LigerShark.Farticus
         {
             await JoinableTaskFactory.SwitchToMainThreadAsync();
 
-            _dte = await GetServiceAsync(typeof(DTE)) as DTE2;
-            Assumes.Present(_dte);
-
-            _events = _dte.Events.BuildEvents;
-            _events.OnBuildDone += OnBuildDone;
+            VS.Events.BuildEvents.ProjectBuildDone += OnBuildDone;
 
             if (await GetServiceAsync(typeof(IMenuCommandService)) is OleMenuCommandService mcs)
             {
-                CommandID fartCmd = new CommandID(PackageGuids.guidFarticusCmdSet, PackageIds.cmdidRandomFart);
-                MenuCommand menuItem = new MenuCommand(OnFartButtonClick, fartCmd);
+                var fartCmd = new CommandID(PackageGuids.guidFarticusCmdSet, PackageIds.cmdidRandomFart);
+                var menuItem = new MenuCommand(OnFartButtonClick, fartCmd);
                 mcs.AddCommand(menuItem);
             }
         }
@@ -60,34 +53,34 @@ namespace LigerShark.Farticus
         {
             FartPlayer.PlayFart(Farts.RandomFart);
 
-            Random rn = new Random();
-            int index = rn.Next(0, _messages.Count);
+            var rn = new Random();
+            var index = rn.Next(0, _messages.Count);
 
-            _dte.StatusBar.Text = _messages[index];
+            VS.StatusBar.ShowMessageAsync(_messages[index]).FireAndForget();
         }
 
-        private void OnBuildDone(vsBuildScope Scope, vsBuildAction Action)
+        private void OnBuildDone(ProjectBuildDoneEventArgs e)
         {
             JoinableTaskFactory.Run(async () =>
             {
 
                 await JoinableTaskFactory.SwitchToMainThreadAsync();
-                FartOptions options = (FartOptions)GetDialogPage(typeof(FartOptions));
+                var options = (FartOptions)GetDialogPage(typeof(FartOptions));
 
                 if (options.Enabled)
                 {
-                    bool isSuccess = _dte.Solution.SolutionBuild.LastBuildInfo == 0;
-                    Fart(isSuccess, options);
-
-                    if (isSuccess)
+                    if (e.IsSuccessful)
                     {
                         _successfulBuilds++;
 
                         if (_hasBuildFailed)
+                        {
                             SetBuildMessage();
+                        }
                     }
                     else
                     {
+                        FartPlayer.PlayFart(options.SelectedErrorFart);
                         _hasBuildFailed = true;
                         _successfulBuilds = 0;
                     }
@@ -96,20 +89,9 @@ namespace LigerShark.Farticus
             });
         }
 
-        private void Fart(bool isSuccess, FartOptions options)
-        {
-            bool hasWarnings = _dte.ToolWindows.ErrorList.ErrorItems.Count > 0;
-
-            if (!isSuccess)
-                FartPlayer.PlayFart(options.SelectedErrorFart);
-
-            else if (isSuccess && hasWarnings)
-                FartPlayer.PlayFart(options.SelectedWarningFart);
-        }
-
         private void SetBuildMessage()
         {
-            string message = string.Format(" - {0} successful build since last fart", _successfulBuilds);
+            var message = string.Format(" - {0} successful build since last fart", _successfulBuilds);
 
             if (_successfulBuilds > 1)
             {
@@ -117,7 +99,7 @@ namespace LigerShark.Farticus
                 message = string.Format(" - {0} successful builds since last fart", _successfulBuilds);
             }
 
-            _dte.StatusBar.Text += message;
+            VS.StatusBar.ShowMessageAsync(message).FireAndForget();
         }
     }
 }
