@@ -10,7 +10,7 @@ namespace LigerShark.Farticus
     {
         public const string Id = "1324ce08-8b25-440c-1234-07e1fa0cce4a";
         public const string Name = "Farticus";
-        public const string Description = @"The original Visual Studio fart app";
+        public const string Description = @"The original Visual Studio fart app! Farticus let's you configure Visual Studio to give you audio warnings when the build breaks. ";
         public const string Language = "en-US";
         public const string Version = "2.0";
         public const string Author = "Sayed Hashimi & Mads Kristensen";
